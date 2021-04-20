@@ -1,9 +1,9 @@
 export default class WeatherService {
   static getWeather(city) {
     return new Promise(function(resolve, reject) {
-      let request = new XMLDocument();
+      let request = new XMLHttpRequest();
       const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
-      request.onload = function() {
+      request.onload = function () {
         if (this.status === 200) {
           resolve(request.response);
         } else {
@@ -14,5 +14,4 @@ export default class WeatherService {
       request.send();
     });
   }
-};
-  
+}
