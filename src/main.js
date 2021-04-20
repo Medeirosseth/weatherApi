@@ -8,19 +8,23 @@ $('#weatherLocation').click(function () {
   const city = $('#location').val();
   $('#location').val("");
 
-  let request = new XMLHttpRequest();
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
+  let promise = new Promise(function (resolve, reject) {
+    let request = new XMLHttpRequest();
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
 
-  request.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      const response = JSON.parse(this.responseText);
-      getElements(response);
-    }
-  };
-  request.open("GET", url, true);
-  request.send();
+    request.onload = function () {
+      if (this.status === 200) {
+        resolve(request.response);
+      } else {
+        reject(request.response)
+      };
+    };
+    request.open("GET", url, true);
+    request.send();
+  });
 
-  function getElements(response) {
+  promise.then(function (response) {
+    const body = JSON.parse(response);
     const k = response.main.temp
     const Fahrenheit = Math.floor((k - 273.15) * 9 / 5 + 32)
 
@@ -29,7 +33,7 @@ $('#weatherLocation').click(function () {
     $('.showFahrenheit').text(`The temperature in Fahrenheit is ${Fahrenheit} degrees.`);
     $('.showClouds').text(`The current cloud level in ${city} is ${response.clouds.all}`);
     $('.showWind').text(`The current Wind speed in ${city} is ${response.wind.speed}`);
-    
-  }
 
+  });
+  
 });
