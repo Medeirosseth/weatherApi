@@ -1,4 +1,4 @@
-#### _Weather_API_
+#### _Weather API_
 
 #### By _**:neckbeard:Seth Medeiros**_
 
